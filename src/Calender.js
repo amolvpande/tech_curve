@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
+import Sidebar from "./Sidebar";
 
 const Calender = ({
   selectedDate,
@@ -83,37 +85,70 @@ const Calender = ({
 
   const handleDateClick = (date) => {
     if (!date) return;
-    const newDate = newDate(
+    const newDate = new Date(
       currentDate.getFullYear(),
       currentDate.getMonth(),
       date
     );
     onDateChange(newDate);
   };
+
   return (
     <div className="calendar-container">
       {!hideSidebar && <Sidebar />}
       <div className="calendar-main">
         <div className="header">
-          <button onClick={handlePreviousMonth}>{buttonTexts.prev}</button>
+          <button
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+            onClick={handlePreviousMonth}
+          >
+            {buttonTexts.prev}
+          </button>
           <div>
-            <p>currentDate</p>
+            <p className="text-xl font-bold">
+              {currentDate.toLocaleString("en-US", {
+                month: "long",
+                year: "numeric",
+              })}
+            </p>
           </div>
-          <button onClick={handleNextMonth}>{buttonTexts.next}</button>
+          <button
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+            onClick={handleNextMonth}
+          >
+            {buttonTexts.next}
+          </button>
         </div>
-        <div className="days"></div>
-        <div className="dates"></div>
+        <div className="days">{renderDaysOfWeek()}</div>
+        <div className="dates grid grid-cols-7 gap-2">{renderDates()}</div>
       </div>
     </div>
   );
 };
 
-const Sidebar = () => {
-  return (
-    <div>
-      <h3>Sidebar</h3>
-    </div>
-  );
+Calender.propTypes = {
+  selectedDate: PropTypes.instanceOf(Date),
+  disablePast: PropTypes.bool,
+  disableFuture: PropTypes.bool,
+  hideSidebar: PropTypes.bool,
+  buttonTexts: PropTypes.shape({
+    prev: PropTypes.string,
+    next: PropTypes.string,
+  }),
+  selectedDateColor: PropTypes.string,
+  onDateChange: PropTypes.func,
+};
+
+Calender.defaultProps = {
+  disablePast: false,
+  disableFuture: false,
+  hideSidebar: false,
+  buttonTexts: {
+    prev: "Prev",
+    next: "Next",
+  },
+  selectedDateColor: "blue",
+  onDateChange: () => {}, // Provide a default empty function if not provided
 };
 
 export default Calender;

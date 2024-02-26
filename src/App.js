@@ -5,7 +5,7 @@ const App = () => {
   const [selectedDate, setSelectedDate] = useState(null);
 
   const handleDateChange = (date) => {
-    selectedDate(date);
+    setSelectedDate(date);
   };
 
   return (
@@ -24,7 +24,7 @@ const App = () => {
       </div>
       <div>
         {selectedDate && (
-          <p>Selected Date:{selectedDate.toLocalDateString("en-US")}</p>
+          <p>Selected Date: {selectedDate.toLocaleDateString("en-US")}</p>
         )}
       </div>
     </>
